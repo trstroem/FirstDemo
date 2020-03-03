@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "workflows_FirstDemo_name": {
-            "defaultValue": "FirstDemos",
+            "defaultValue": "FirstDemo",
             "type": "string"
         },
         "workflows_FirstDemo_parameters_$connections": {
