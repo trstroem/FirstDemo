@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_FirstDemo_name": {
+            "value": "FirstDemo"
+        },
+        "workflows_FirstDemo_parameters_$connections": {
+            "value": {
+                "office365": {
+                    "connectionId": "/subscriptions/9c440e51-4425-4fae-9340-ef853b24d158/resourceGroups/RulesEngineDemo/providers/Microsoft.Web/connections/office365",
+                    "connectionName": "office365",
+                    "id": "/subscriptions/9c440e51-4425-4fae-9340-ef853b24d158/providers/Microsoft.Web/locations/northeurope/managedApis/office365"
+                }
+            }
+        },
+        "workflows_FirstDemo_parameters_logicAppName": {
+            "value": "FirstDemo"
+        },
+        "azurequeues_1_Connection_Name": {
+            "value": "azurequeues"
+          },
+          "azurequeues_1_Connection_DisplayName": {
+            "value": "storageaccount"
+          },
+          "azurequeues_1_storageaccount": {
+            "value": "storageaccount"
+          },
+          "azurequeues_1_sharedkey": {
+            "value": "xxxxxxxxxxxxxxx"
+          }
+    }
+}

@@ -1,0 +1,200 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_FirstDemo_name": {
+            "defaultValue": "FirstDemo",
+            "type": "string"
+        },
+        "workflows_FirstDemo_parameters_$connections": {
+            "defaultValue": {
+                "office365": {
+                    "connectionId": "/subscriptions/9c440e51-4425-4fae-9340-ef853b24d158/resourceGroups/RulesEngineDemo/providers/Microsoft.Web/connections/office365",
+                    "connectionName": "office365",
+                    "id": "/subscriptions/9c440e51-4425-4fae-9340-ef853b24d158/providers/Microsoft.Web/locations/northeurope/managedApis/office365"
+                }
+            },
+            "type": "Object"
+        },
+        "workflows_FirstDemo_parameters_logicAppName": {
+            "defaultValue": "FirstDemo",
+            "type": "String"
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2017-07-01",
+            "dependsOn": [],
+            "location": "northeurope",
+            "name": "[parameters('workflows_FirstDemo_name')]",
+            "properties": {
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {
+                                "office365": {
+                                    "connectionId": "/subscriptions/9c440e51-4425-4fae-9340-ef853b24d158/resourceGroups/RulesEngineDemo/providers/Microsoft.Web/connections/office365",
+                                    "connectionName": "office365",
+                                    "id": "/subscriptions/9c440e51-4425-4fae-9340-ef853b24d158/providers/Microsoft.Web/locations/northeurope/managedApis/office365"
+                                }
+                            },
+                            "type": "Object"
+                        },
+                        "logicAppName": {
+                            "defaultValue": "FirstDemo",
+                            "type": "String"
+                        }
+                    },
+                    "triggers": {
+                        "manual": {
+                            "type": "Request",
+                            "kind": "Http",
+                            "inputs": {
+                                "schema": {
+                                    "properties": {
+                                        "channel": {
+                                            "type": "string"
+                                        },
+                                        "customerId": {
+                                            "type": "string"
+                                        },
+                                        "date": {
+                                            "type": "string"
+                                        },
+                                        "lineItems": {
+                                            "type": "array"
+                                        },
+                                        "orderNumber": {
+                                            "type": "string"
+                                        },
+                                        "shipTo": {
+                                            "properties": {
+                                                "city": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "state": {
+                                                    "type": "string"
+                                                },
+                                                "street": {
+                                                    "type": "string"
+                                                },
+                                                "zip": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "subtotal": {
+                                            "type": "number"
+                                        },
+                                        "total": {
+                                            "type": "number"
+                                        },
+                                        "totalWeight": {
+                                            "type": "number"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "actions": {
+                        "Condition": {
+                            "actions": {
+                                "Send_an_email_(V2)": {
+                                    "runAfter": {},
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "body": {
+                                            "Body": "<p>Hi there, we need an approval here!!</p>",
+                                            "Subject": "Approval needed",
+                                            "To": "trond.stroemme@gmail.com"
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['office365']['connectionId']"
+                                            }
+                                        },
+                                        "method": "post",
+                                        "path": "/v2/Mail"
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Parse_JSON": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "expression": {
+                                "and": [
+                                    {
+                                        "equals": [
+                                            "@body('Parse_JSON')?['requiresApproval']",
+                                            true
+                                        ]
+                                    }
+                                ]
+                            },
+                            "type": "If"
+                        },
+                        "Parse_JSON": {
+                            "runAfter": {
+                                "Transform_JSON_to_JSON": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ParseJson",
+                            "inputs": {
+                                "content": "@body('Transform_JSON_to_JSON')",
+                                "schema": {
+                                    "properties": {
+                                        "discount": {
+                                            "type": "number"
+                                        },
+                                        "requiresApproval": {
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "Transform_JSON_to_JSON": {
+                            "runAfter": {},
+                            "type": "Liquid",
+                            "kind": "JsonToJson",
+                            "inputs": {
+                                "content": "@triggerBody()",
+                                "integrationAccount": {
+                                    "map": {
+                                        "name": "DemoMap1"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": "[parameters('workflows_FirstDemo_parameters_$connections')]"
+                    },
+                    "logicAppName": {
+                        "value": "[parameters('workflows_FirstDemo_parameters_logicAppName')]"
+                    }
+                },
+                "state": "Enabled"
+            },
+            "scale": null,
+            "tags": {},
+            "type": "Microsoft.Logic/workflows"
+        }
+    ],
+    "variables": {}
+}
