@@ -16,18 +16,6 @@
         },
         "workflows_FirstDemo_parameters_logicAppName": {
             "value": "FirstDemo"
-        },
-        "azurequeues_1_Connection_Name": {
-            "value": "azurequeues"
-          },
-          "azurequeues_1_Connection_DisplayName": {
-            "value": "storageaccount"
-          },
-          "azurequeues_1_storageaccount": {
-            "value": "storageaccount"
-          },
-          "azurequeues_1_sharedkey": {
-            "value": "xxxxxxxxxxxxxxx"
-          }
+        }
     }
 }
