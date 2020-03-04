@@ -194,6 +194,38 @@
             "scale": null,
             "tags": {},
             "type": "Microsoft.Logic/workflows"
+        },
+        {
+            "type": "Microsoft.Logic/integrationAccounts",
+            "apiVersion": "2016-06-01",
+            "name": "[parameters('integrationAccounts_firstDemoAccount_name')]",
+            "location": "northeurope",
+            "sku": {
+                "name": "Free"
+            },
+            "properties": {
+                "state": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Logic/integrationAccounts/maps",
+            "apiVersion": "2016-06-01",
+            "name": "[concat(parameters('integrationAccounts_firstDemoAccount_name'), '/DemoMap1')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Logic/integrationAccounts', parameters('integrationAccounts_firstDemoAccount_name'))]"
+            ],
+            "properties": {
+                "mapType": "Liquid",
+                "contentLink": {
+                    "uri": "https://prod-53.northeurope.logic.azure.com:443/integrationAccounts/bddd6fc210a14c9db4e5616dde691de9/maps/DemoMap1/contents/Value?api-version=2015-08-01-preview&se=2020-03-04T15%3A03%3A53.8617839Z&sp=%2Fmaps%2FDemoMap1%2Fread&sv=1.0&sig=RDxI4JppiNJfaiRrvgVIu-AWWEP_V5ukl6TG5s7jymE",
+                    "contentVersion": "\"0x8D7BC68DC8CE7C8\"",
+                    "contentSize": 1244,
+                    "contentHash": {
+                        "algorithm": "md5",
+                        "value": "6GrL3Zz0yIFERmdT8pdq8w=="
+                    }
+                }
+            }
         }
     ],
     "variables": {}

@@ -16,6 +16,10 @@
         },
         "workflows_FirstDemo_parameters_logicAppName": {
             "value": "FirstDemo"
+        },
+        "integrationAccounts_firstDemoAccount_name": {
+            "defaultValue": "firstDemoAccount",
+            "type": "String"
         }
     }
 }
